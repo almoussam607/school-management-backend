@@ -2,18 +2,18 @@ package com.project.schoolmanagment.entity.concretes.business;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.schoolmanagment.entity.concretes.user.User;
 import com.project.schoolmanagment.entity.enums.Day;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -44,5 +44,14 @@ public class LessonProgram {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "lessonProgramList",fetch = FetchType.EAGER)
+    private Set<User>users;
+
+
+    @PreRemove
+    private void removeLessonFromUser(){
+        users.forEach(user -> user.getLessonProgramList().remove(this));
+    }
 
 }

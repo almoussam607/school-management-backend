@@ -1,15 +1,15 @@
 package com.project.schoolmanagment.entity.concretes.business;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.schoolmanagment.entity.concretes.user.User;
 import com.project.schoolmanagment.entity.enums.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -18,6 +18,9 @@ import javax.persistence.OneToOne;
 @Builder
 public class StudentInfo {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Integer absentee;
@@ -26,14 +29,26 @@ public class StudentInfo {
 
     private Double finalExam;
 
+    private String infoNote;
+
     private Double examAverage;
 
+    @Enumerated(EnumType.STRING)
     private Note letterGrade;
+
+    @JsonIgnore
+    @ManyToOne
+    private User teacher;
+
+    @JsonIgnore
+    @ManyToOne
+    private User student;
 
     @ManyToOne
     private Lesson lesson;
 
-
     @OneToOne
     private EducationTerm educationTerm;
+
+
 }
